@@ -23,10 +23,6 @@ export class App {
   }
 
   private initializeRoutes() {
-    this.app.get('/health', (req: Request, res: Response) => {
-      res.status(200).json({ status: 'ok', message: 'API is running smoothly' });
-    });
-
     this.app.use('/api', this.subscriptionRoutes.router);
   }
 

@@ -1,4 +1,5 @@
 import { buildAppContainer } from './container';
+import { redis } from './general/cache/redis.service';
 import { prisma } from './general/db/prisma.service';
 import dotenv from 'dotenv';
 
@@ -6,6 +7,7 @@ dotenv.config();
 
 async function bootstrap() {
   await prisma.connect();
+  await redis.connect();
 
   const application = buildAppContainer();
   const port = process.env.PORT || 4200;
@@ -18,6 +20,7 @@ async function bootstrap() {
     console.log('\nStopping the server...');
     server.close(async () => {
       await prisma.disconnect();
+      await redis.disconnect();
       console.log('Server has stopped successfully.');
       process.exit(0);
     });

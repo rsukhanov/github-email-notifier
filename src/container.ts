@@ -4,9 +4,14 @@ import { SubscriptionController } from './modules/subscription/subscription.cont
 import { SubscriptionRoutes } from './modules/subscription/subscription.routes';
 import { App } from './app';
 import express from 'express';
+import { ScannerService } from './modules/scanner/scanner.service';
 
 export function buildAppContainer(): App {
   const githubService = new GithubService();
+  
+  const scannerService = new ScannerService(githubService);
+  scannerService.start();
+  
   const subscriptionService = new SubscriptionService(githubService);
 
   const subscriptionController = new SubscriptionController(subscriptionService);

@@ -7,6 +7,11 @@ export class SubscriptionService {
   constructor(private githubService: GithubService) {}
 
   async subscribe(email: string, repoName: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      throw new BadRequestException('Invalid email format');
+    }
     const repoRegex = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/;
     if (!repoRegex.test(repoName)) {
       throw new BadRequestException('Invalid repository format. Use owner/repo');
