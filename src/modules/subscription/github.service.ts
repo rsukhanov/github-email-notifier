@@ -1,5 +1,5 @@
 import { redis } from "../../general/cache/redis.service";
-import { NotFoundException, TooManyRequestsException } from "../../general/exceptions/http.exception";
+import { TooManyRequestsException } from "../../general/exceptions/http.exception";
 
 export class GithubService {
   private readonly BASE_URL = 'https://api.github.com/repos';
@@ -22,7 +22,7 @@ export class GithubService {
 
     if (response.status === 404) {
       await redis.set(cacheKey, 'false', this.CACHE_TTL);
-      throw new NotFoundException('Repository not found on GitHub');
+      return false;
     }
 
     this.checkRateLimit(response);
@@ -35,7 +35,7 @@ export class GithubService {
     const cached = await redis.get(cacheKey);
 
     if (cached) {
-      return cached === 'null_release' ? null : cached;
+      return cached;
     }
 
     const response = await fetch(`${this.BASE_URL}/${repoName}/releases/latest`);
@@ -47,7 +47,6 @@ export class GithubService {
     }
 
     if (response.status === 404) {
-      await redis.set(cacheKey, 'null_release', this.CACHE_TTL);
       return null; 
     }
 

@@ -74,7 +74,10 @@ export class SubscriptionService {
   }
 
   async confirmSubscription(token: string) {
-    const subscription = await prisma.subscription.findUnique({ where: { token } });
+    const subscription = await prisma.subscription.findUnique({ 
+      where: { token },
+      include: { repository: true },
+    });
     if (!subscription) {
       throw new NotFoundException('Token not found');
     }
@@ -83,6 +86,16 @@ export class SubscriptionService {
       where: { id: subscription.id },
       data: { status: 'ACTIVE' },
     });
+
+    if (!subscription.repository.lastSeenTag) {
+      const tag = await this.githubService.getLatestReleaseTag(subscription.repository.name);
+      if (tag) {
+        await prisma.repository.update({
+          where: { id: subscription.repository.id },
+          data: { lastSeenTag: tag },
+        });
+      }
+    }
   }
 
   async unsubscribe(token: string): Promise<void> {
