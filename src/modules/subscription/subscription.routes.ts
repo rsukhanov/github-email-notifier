@@ -12,6 +12,9 @@ export class SubscriptionRoutes {
   }
 
   private initializeRoutes(): void {
-    this.router.post('/', this.controller.subscribe);
+    this.router.post('/subscribe', this.controller.subscribe);
+    this.router.get('/confirm/:token', this.controller.confirmSubscription);
+    this.router.get('/unsubscribe/:token', this.controller.unsubscribe);
+    this.router.get('/subscriptions', this.controller.getSubscriptions);
   }
 }

@@ -6,8 +6,7 @@ export class SubscriptionService {
 
   constructor(private githubService: GithubService) {}
 
-  async subscribe(email: string, repoName: string): Promise<void> {
-    
+  async subscribe(email: string, repoName: string) {
     const repoRegex = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/;
     if (!repoRegex.test(repoName)) {
       throw new BadRequestException('Invalid repository format. Use owner/repo');
@@ -43,5 +42,40 @@ export class SubscriptionService {
         repositoryId: repository.id,
       },
     });
+  }
+
+  async getSubscriptions(email: string) {
+    const subscriptions = await prisma.subscription.findMany({
+      where: { email },
+      include: { repository: true },
+    });
+
+    return subscriptions.map((sub) => ({
+      email: sub.email,
+      repo: sub.repository.name,
+      confirmed: sub.status === 'ACTIVE',
+      last_seen_tag: sub.repository.lastSeenTag,
+    }));
+  }
+
+  async confirmSubscription(token: string) {
+    const subscription = await prisma.subscription.findUnique({ where: { token } });
+    if (!subscription) {
+      throw new NotFoundException('Token not found');
+    }
+
+    await prisma.subscription.update({
+      where: { id: subscription.id },
+      data: { status: 'ACTIVE' },
+    });
+  }
+
+  async unsubscribe(token: string): Promise<void> {
+    const subscription = await prisma.subscription.findUnique({ where: { token } });
+    if (!subscription) {
+      throw new NotFoundException('Token not found');
+    }
+
+    await prisma.subscription.delete({ where: { id: subscription.id } });
   }
 }

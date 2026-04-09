@@ -9,25 +9,31 @@ datasource db {
 
 model Repository {
   id            String         @id @default(uuid())
-
   name          String         @unique
   lastSeenTag   String?
-
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
-  subscriptions Subscription[] 
+  subscriptions Subscription[]
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
 }
 
 model Subscription {
-  id           String     @id @default(uuid())
+  id           String             @id @default(uuid())
   
   email        String
 
-  createdAt    DateTime   @default(now())
+  status       SubscriptionStatus @default(PENDING)
+  token        String             @unique @default(uuid())
+
+  createdAt    DateTime           @default(now())
 
   repositoryId String
-  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  repository   Repository         @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 
-  @@unique([email, repositoryId]) 
+  @@unique([email, repositoryId])
 }
