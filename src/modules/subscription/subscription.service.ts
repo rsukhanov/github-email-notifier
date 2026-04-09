@@ -1,10 +1,14 @@
 import { prisma } from "../../general/db/prisma.service";
 import { BadRequestException, ConflictException, NotFoundException } from "../../general/exceptions/http.exception";
+import { NotifierService } from "../notifier/notifier.service";
 import { GithubService } from "./github.service";
 
 export class SubscriptionService {
 
-  constructor(private githubService: GithubService) {}
+  constructor(
+    private githubService: GithubService,
+    private notifierService: NotifierService
+  ) {}
 
   async subscribe(email: string, repoName: string) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -41,12 +45,18 @@ export class SubscriptionService {
       throw new ConflictException('Already subscribed to this repository');
     }
 
-    await prisma.subscription.create({
+    const subscription = await prisma.subscription.create({
       data: {
         email,
         repositoryId: repository.id,
       },
     });
+
+    this.notifierService.sendConfirmationEmail(
+      email, 
+      repoName, 
+      subscription.token
+    );
   }
 
   async getSubscriptions(email: string) {

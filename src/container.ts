@@ -5,15 +5,16 @@ import { SubscriptionRoutes } from './modules/subscription/subscription.routes';
 import { App } from './app';
 import express from 'express';
 import { ScannerService } from './modules/scanner/scanner.service';
+import { NotifierService } from './modules/notifier/notifier.service';
 
 export function buildAppContainer(): App {
   const githubService = new GithubService();
+  const notifierService = new NotifierService();
   
-  const scannerService = new ScannerService(githubService);
+  const scannerService = new ScannerService(githubService, notifierService);
   scannerService.start();
-  
-  const subscriptionService = new SubscriptionService(githubService);
 
+  const subscriptionService = new SubscriptionService(githubService, notifierService);
   const subscriptionController = new SubscriptionController(subscriptionService);
 
   const subscriptionRoutes = new SubscriptionRoutes(subscriptionController);

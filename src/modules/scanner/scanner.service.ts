@@ -1,11 +1,13 @@
 import cron from 'node-cron';
 import { prisma } from '../../general/db/prisma.service';
 import { GithubService } from '../subscription/github.service';
+import { NotifierService } from '../notifier/notifier.service';
 
 export class ScannerService {
-  private readonly SCAN_MINUTE_INTERVAL = 9; 
+  private readonly SCAN_MINUTE_INTERVAL = 1; 
   constructor(
     private githubService: GithubService,
+    private notifierService: NotifierService
   ) {}
 
   public start() {
@@ -46,8 +48,12 @@ export class ScannerService {
             });
 
             for (const subscription of repo.subscriptions) {
-              // send email notify 
-              console.log(`📧 (Mock) Sending email to ${subscription.email} about ${repo.name} ${latestTag}`);
+              this.notifierService.sendReleaseEmail(
+                subscription.email, 
+                repo.name, 
+                latestTag, 
+                subscription.token
+              );
             }
           }
 

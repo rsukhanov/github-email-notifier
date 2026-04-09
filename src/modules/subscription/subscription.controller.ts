@@ -22,8 +22,6 @@ export class SubscriptionController {
 
       await this.subscriptionService.subscribe(email, repo);
 
-      // send emall with confirmation link
-      
       res.status(200).json({ message: 'Subscribed successfully' });
     } catch (error) {
       next(error);
