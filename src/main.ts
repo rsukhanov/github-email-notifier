@@ -10,7 +10,7 @@ async function bootstrap() {
   await redis.connect();
 
   const application = buildAppContainer();
-  const port = process.env.PORT || 4200;
+  const port = 4200;
 
   const server = application.app.listen(port, () => {
     console.log(`🚀 Service started on http://localhost:${port}`);

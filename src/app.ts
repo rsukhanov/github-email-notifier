@@ -13,6 +13,7 @@ export class App {
     private subscriptionRoutes: SubscriptionRoutes,
     private metricsService: MetricsService
   ) {
+    this.app.set('trust proxy', true);
     this.initializeMiddlewares();
     this.initializeRoutes();
     this.initializeSwagger();

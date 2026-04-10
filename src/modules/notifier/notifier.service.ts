@@ -22,7 +22,7 @@ export class NotifierService {
   }
 
   async sendConfirmationEmail(email: string, repoName: string, token: string) {
-    const unsubscribeLink = `${process.env.API_URL}/unsubscribe/${token}`;
+    const unsubscribeLink = `${process.env.DOMAIN_URL}/api/unsubscribe/${token}`;
     const confirmLink = `${process.env.DOMAIN_URL}/confirm.html?token=${token}&repo=${encodeURIComponent(repoName)}`;
     
     try {
@@ -46,7 +46,7 @@ export class NotifierService {
   }
 
   async sendReleaseEmail(email: string, repoName: string, releaseTag: string, token: string) {
-    const unsubscribeLink = `${process.env.API_URL}/unsubscribe/${token}`;
+    const unsubscribeLink = `${process.env.DOMAIN_URL}/api/unsubscribe/${token}`;
 
     try {
       await this.transporter.sendMail({
