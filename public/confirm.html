@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Subscription</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f6f8fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #fff; padding: 32px; border: 1px solid #d0d7de; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; max-width: 400px; }
+        h2 { margin-bottom: 16px; color: #24292f; }
+        p { color: #57606a; margin-bottom: 24px; }
+        .btn { display: inline-block; padding: 10px 20px; background: #0969da; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; }
+        .btn:hover { background: #0550ae; }
+    </style>
+</head>
+<body>
+    <div class="card" id="content">
+        <h2>Confirming...</h2>
+        <p>Please wait while we verify your token.</p>
+    </div>
+
+    <script>
+        async function confirmToken() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const repo = urlParams.get('repo');
+
+            const content = document.getElementById('content');
+
+            if (!token) {
+                content.innerHTML = `<h2>Error ❌</h2><p>No token provided in the URL.</p><a href="/" class="btn">Go Home</a>`;
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/confirm/${token}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    content.innerHTML = `<h2>Success! 🎉</h2><p>Your subscription for <br/> <b>${repo}</b> is now active.</p><a href="/" class="btn">Go Home</a>`;
+                } else {
+                    content.innerHTML = `<h2>Error ❌</h2><p>${data.error || 'Invalid or expired token.'}</p><a href="/" class="btn">Go Home</a>`;
+                }
+            } catch (error) {
+                content.innerHTML = `<h2>Error ❌</h2><p>Network error occurred.</p><a href="/" class="btn">Go Home</a>`;
+            }
+        }
+
+        confirmToken();
+    </script>
+</body>
+</html>

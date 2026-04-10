@@ -23,6 +23,8 @@ export class App {
     this.app.use(cors());
     this.app.use(express.json());
 
+    this.app.use(express.static(path.join(process.cwd(), 'public')));
+    
     this.app.use(this.metricsService.metricsMiddleware);
   }
 

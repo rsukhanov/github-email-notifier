@@ -22,9 +22,9 @@ export class NotifierService {
   }
 
   async sendConfirmationEmail(email: string, repoName: string, token: string) {
-    const confirmLink = `${process.env.API_URL}/confirm/${token}`;
     const unsubscribeLink = `${process.env.API_URL}/unsubscribe/${token}`;
-
+    const confirmLink = `${process.env.DOMAIN_URL}/confirm.html?token=${token}&repo=${encodeURIComponent(repoName)}`;
+    
     try {
       await this.transporter.sendMail({
         from: this.sender,
