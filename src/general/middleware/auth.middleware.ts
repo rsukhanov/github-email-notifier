@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-export const apiKeyAuthMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+export const apiKeyAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const requireAuth = process.env.REQUIRE_API_KEY === 'true';
   
   if (!requireAuth) {

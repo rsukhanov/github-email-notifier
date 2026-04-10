@@ -12,7 +12,7 @@ export class SubscriptionRoutes {
     this.initializeRoutes();
   }
 
-  private initializeRoutes(): void {
+  private initializeRoutes() {
     this.router.post('/subscribe', apiKeyAuthMiddleware, this.controller.subscribe);
     this.router.get('/confirm/:token', this.controller.confirmSubscription);
     this.router.get('/unsubscribe/:token', this.controller.unsubscribe);

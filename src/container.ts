@@ -6,6 +6,7 @@ import { App } from './app';
 import express from 'express';
 import { ScannerService } from './modules/scanner/scanner.service';
 import { NotifierService } from './modules/notifier/notifier.service';
+import { MetricsService } from './general/metrics/metrics.service';
 
 export function buildAppContainer(): App {
   const githubService = new GithubService();
@@ -19,6 +20,7 @@ export function buildAppContainer(): App {
 
   const subscriptionRoutes = new SubscriptionRoutes(subscriptionController);
 
+  const metricsService = new MetricsService();
   const expressInstance = express();
-  return new App(expressInstance, subscriptionRoutes);
+  return new App(expressInstance, subscriptionRoutes, metricsService);
 }

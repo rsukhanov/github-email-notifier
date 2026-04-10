@@ -98,7 +98,7 @@ export class SubscriptionService {
     }
   }
 
-  async unsubscribe(token: string): Promise<void> {
+  async unsubscribe(token: string) {
     const subscription = await prisma.subscription.findUnique({ where: { token } });
     if (!subscription) {
       throw new NotFoundException('Token not found');
