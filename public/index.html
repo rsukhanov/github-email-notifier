@@ -149,6 +149,11 @@
                 <input type="text" id="repo" placeholder="owner/repo (e.g., facebook/react)" required>
             </div>
 
+            <div class="form-group" id="apiKeyGroup" style="display: none;">
+                <label for="apiKey">API Key <span style="color: #cf222e;">*</span></label>
+                <input type="password" id="apiKey" placeholder="Enter your API Key">
+            </div>
+
             <button type="submit" id="submitBtn">Subscribe</button>
         </form>
 
@@ -159,6 +164,23 @@
         const form = document.getElementById('subscribeForm');
         const submitBtn = document.getElementById('submitBtn');
         const statusMsg = document.getElementById('statusMsg');
+        const apiKeyGroup = document.getElementById('apiKeyGroup');
+        const apiKeyInput = document.getElementById('apiKey');
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/config');
+                if (res.ok) {
+                    const config = await res.json();
+                    if (config.requireApiKey) {
+                        apiKeyGroup.style.display = 'block';
+                        apiKeyInput.required = true;
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to load config', e);
+            }
+        });
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -168,16 +190,24 @@
 
             statusMsg.className = 'status-message';
             statusMsg.innerText = '';
-            
             submitBtn.disabled = true;
             submitBtn.innerText = 'Subscribing...';
+
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+
+            if (apiKeyGroup.style.display !== 'none') {
+                const apiKey = apiKeyInput.value.trim();
+                if (apiKey) {
+                    headers['x-api-key'] = apiKey;
+                }
+            }
 
             try {
                 const response = await fetch('/api/subscribe', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: headers,
                     body: JSON.stringify({ email, repo })
                 });
 

@@ -24,12 +24,17 @@ export class App {
     this.app.use(express.json());
 
     this.app.use(express.static(path.join(process.cwd(), 'public')));
-    
+
     this.app.use(this.metricsService.metricsMiddleware);
   }
 
   private initializeRoutes() {
     this.app.get('/metrics', this.metricsService.getMetricsRoute);
+    
+    this.app.get('/api/config', (req: Request, res: Response) => {
+      res.json({ requireApiKey: process.env.REQUIRE_API_KEY === 'true' });
+    });
+
     this.app.use('/api', this.subscriptionRoutes.router);
   }
 
