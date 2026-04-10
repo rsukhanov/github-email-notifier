@@ -41,5 +41,10 @@ services:
       REDIS_URL: "redis://redis:6379"
       PORT: 4200
 
+  tunnel:
+    image: cloudflare/cloudflared
+    restart: always
+    command: tunnel run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+
 volumes:
   postgres_data:
