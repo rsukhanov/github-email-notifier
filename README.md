@@ -7,6 +7,8 @@ A production-ready REST API service that allows users to subscribe to email noti
 
 Built as a test assignment, this project demonstrates a deep understanding of backend architecture, caching strategies, background processing, monitoring, and containerization.
 
+It is currently deployed on a cloud Ubuntu VPS.
+
 ---
 
 ## 📌 Table of Contents
