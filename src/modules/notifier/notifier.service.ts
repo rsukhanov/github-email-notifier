@@ -5,7 +5,7 @@ export class NotifierService {
   private transporter: nodemailer.Transporter;
   
   private sender = {
-    address: `noreply@${process.env.DOMAIN}`,
+    address: `noreply@${process.env.EMAIL_DOMAIN}`,
     name: 'GitHub Notifier',
   };
 

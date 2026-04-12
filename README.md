@@ -162,7 +162,7 @@ REDIS_URL="redis://redis:6379"
 
 # Email Provider (Mailtrap / SMTP)
 MAILTRAP_TOKEN=your_mailtrap_token_123
-DOMAIN=rsukhanov.com
+EMAIL_DOMAIN=rsukhanov.com
 
 # Security
 REQUIRE_API_KEY=false
@@ -191,7 +191,7 @@ The absolute easiest way to run the application is using Docker. The `docker-com
 
 Once started, the application will be available at:
 
-* **UI:** http://localhost:4200 (or your configured by your CLOUDFLARE_TUNNEL_TOKEN)
+* **UI:** http://localhost:4200 (or domain configured by your CLOUDFLARE_TUNNEL_TOKEN)
 * **Swagger Docs:** http://localhost:4200/api-docs
 * **Metrics:** http://localhost:4200/metrics
 

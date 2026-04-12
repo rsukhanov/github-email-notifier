@@ -4,7 +4,7 @@ import { GithubService } from '../subscription/github.service';
 import { NotifierService } from '../notifier/notifier.service';
 
 export class ScannerService {
-  private readonly SCAN_MINUTE_INTERVAL = 5; 
+  private readonly SCAN_MINUTE_INTERVAL = 10;
   constructor(
     private githubService: GithubService,
     private notifierService: NotifierService
