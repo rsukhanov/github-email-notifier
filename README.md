@@ -1,5 +1,8 @@
 # 🚀 GitHub Release Notifier API
 
+**🟢 Live Demo:** [https://github-email-notifier.rsukhanov.com](https://github-email-notifier.rsukhanov.com)  
+**📘 Swagger API Docs:** [https://github-email-notifier.rsukhanov.com/api-docs](https://github-email-notifier.rsukhanov.com/api-docs)
+
 A production-ready REST API service that allows users to subscribe to email notifications about new releases of their favorite GitHub repositories. 
 
 Built as a test assignment, this project demonstrates a deep understanding of backend architecture, caching strategies, background processing, monitoring, and containerization.
